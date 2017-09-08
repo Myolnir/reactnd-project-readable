@@ -11,6 +11,8 @@ export default function Post(props) {
         <br />
 
         <hr />
+        <i><p className="card-text">Author: {props.post.author}</p></i>
+
         <a href="#" className="btn btn-primary">Edit</a>
         <a href="#" className="btn btn-danger">Delete</a>
       </div>
