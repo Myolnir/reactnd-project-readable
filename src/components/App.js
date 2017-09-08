@@ -4,6 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 
 import PostsList from './PostsList';
 import CategoryList from './CategoryList';
+import PostDetail from './PostDetail';
 import Header from './Header';
 import * as actions from '../actions';
 import '../App.css';
@@ -20,14 +21,18 @@ class App extends Component {
         <Header />
         <div className="container">
           <div className="row">
-            <div className="col-8">
+            <div className="col-10">
               <Route exact path="/" component={PostsList} />
               <Route exact path="/:category" render={({ match }) => {
                 const { category } = match.params;
                 return <PostsList category={category} />
               }} />
+              <Route exact path="/posts/:id" render={({ match }) => {
+                const { id } = match.params;
+                return <PostDetail postId={id} />
+              }} />
             </div>
-            <div className="col-4"><CategoryList /></div>
+            <div className="col-2"><CategoryList /></div>
           </div>
         </div>
       </div>
