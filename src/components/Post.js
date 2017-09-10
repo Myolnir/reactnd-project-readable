@@ -6,7 +6,7 @@ import MdAccountCircle from 'react-icons/lib/md/account-circle';
 import MdDateRange from 'react-icons/lib/md/date-range';
 import MdCreate from 'react-icons/lib/md/create';
 import MdDelete from 'react-icons/lib/md/delete';
-import * as actions from '../actions';
+import { deleteContent } from '../actions';
 import EditPost from './EditPost';
 
 import Vote from './Vote';
@@ -19,27 +19,28 @@ class Post extends Component {
   render() {
     const { post } = this.props;
     const date = new Date(post.timestamp).toDateString();
+    const time = new Date(post.timestamp).toLocaleTimeString();
 
     return (
       <div>
         <div className="post-cards card text-left text-white bg-dark card-margin-bottom">
           <div className="card-body">
-            <h4 className="card-title">{post.title}</h4>
+            <Link
+              to={`/${post.category}/${post.id}`}
+              className="card-text">
+              <h4 className="card-title">{post.title}</h4>
+            </Link>
             <div className="row">
               <div className="col-10">
                 <p className="card-text">{post.body}</p>
-                  <Link
-                    to={`/${post.category}/${post.id}`}
-                    className="card-text">
-                      <MdComment size={30} /> Comments ({`${post.comments ? post.comments.length : 0 }`})
-                  </Link>
+                <p><MdComment size={30} /> Comments ({`${post.comments ? post.comments.length : 0 }`})</p>
               </div>
               <div className="col-2">
                 <Vote post={post} path="posts"/>
               </div>
             </div>
             <hr />
-            <p className="card-text author"><MdAccountCircle size={25}/> {post.author} | <MdDateRange size={25} /> {date}</p>
+            <p className="card-text author"><MdAccountCircle size={25}/> {post.author} | <MdDateRange size={25} /> {`${date} ${time}`}</p>
             <div className="post-buttons float-md-right">
               <button
                 onClick={() => { document.getElementById(post.id).style.display = "block" }}
@@ -56,4 +57,4 @@ class Post extends Component {
   }
 }
 
-export default connect(null, actions)(Post);
+export default connect(null, { deleteContent })(Post);

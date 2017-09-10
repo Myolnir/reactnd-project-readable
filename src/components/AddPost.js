@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
+import MdCreate from 'react-icons/lib/md/create';
 import uuid from 'uuid';
 
-import * as actions from '../actions';
+import { postContent } from '../actions';
 
 class AddPost extends Component {
-  onSubmitPost() {
+  onSubmitPost(e) {
+    e.preventDefault();
+
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
     const body = document.getElementById('body').value;
@@ -34,15 +37,16 @@ class AddPost extends Component {
     return (
       <div>
         <div className="card bg-light mb-3">
-          <div className="card-header">Add Post</div>
+          <div className="card-header bg-primary text-white">Add Post</div>
           <div className="card-body">
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={(e) => this.onSubmitPost(e)}>
               <input
                 className="form-control col-4"
                 name="title"
                 id="title"
                 type="text"
-                placeholder="Title" />
+                placeholder="Title"
+                required />
               <br />
 
               <input
@@ -50,12 +54,14 @@ class AddPost extends Component {
                 name="author"
                 id="author"
                 type="text"
-                placeholder="Author" />
+                placeholder="Author"
+                required />
               <br />
 
               <select className="form-control col-2" name="category" id="category">
               { categories ? categories.map(category => {
-                return <option key={category.name} value={category.name}>{category.name}</option> })
+                const formattedCategory = category.name.charAt(0).toUpperCase() + category.name.slice(1);
+                return <option key={formattedCategory} value={category.name}>{formattedCategory}</option> })
                 : ''}
               </select>
               <br />
@@ -65,13 +71,14 @@ class AddPost extends Component {
                 name="body"
                 id="body"
                 cols="3"
-                placeholder="Enter Post..." />
+                placeholder="Enter Post..."
+                required />
               <br />
 
               <button
-                onClick={this.onSubmitPost.bind(this)}
+                type="submit"
                 className="btn btn-primary float-md-left">
-                Submit Post
+                <MdCreate /> Submit Post
               </button>
             </form>
           </div>
@@ -87,4 +94,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, actions)(AddPost));
+export default withRouter(connect(mapStateToProps, { postContent })(AddPost));

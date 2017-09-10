@@ -59,6 +59,10 @@ a:hover {
   right: 3%;
 }
 
-.edit-post-container {
+.edit-post-container, .edit-comment-container {
   display: none;
+}
+
+.filter-control-container {
+  margin-bottom: 3px;
 }

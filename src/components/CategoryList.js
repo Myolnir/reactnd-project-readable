@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import Category from './Category';
@@ -9,7 +9,7 @@ function CategoryList(props) {
   return (
     <div>
       <div>
-         <h5>Categories</h5>
+        <h5>Categories</h5>
         <hr />
         {categories ? categories.map((category) =>
           <Category key={category.name} category={category} />) : ''}

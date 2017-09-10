@@ -7,13 +7,16 @@ import MdDateRange from 'react-icons/lib/md/date-range';
 import MdCreate from 'react-icons/lib/md/create';
 import MdDelete from 'react-icons/lib/md/delete';
 
-import * as actions from '../actions';
+import { postContent, deleteContent } from '../actions';
+import PageNotFound from './PageNotFound';
 import EditPost from './EditPost';
 import Comment from './Comment';
 import Vote from './Vote';
 
 class PostDetail extends Component {
-  onSubmitComment() {
+  onSubmitComment(e) {
+    e.preventDefault();
+
     const { postId } = this.props;
     const body = document.getElementById('comment').value;
     const author = document.getElementById('author').value;
@@ -33,10 +36,10 @@ class PostDetail extends Component {
 
   render() {
     const { posts, postId, history } = this.props;
+    const selectedPost = posts ? posts.filter(p => { return p.id === postId }) : '';
 
     return (
-      <div>{ posts ? posts.filter(p => {
-        return p.id === postId }).map((post) => {
+      <div>{ selectedPost.length > 0 ? selectedPost.map((post) => {
           return (
             <div key={post.id} className="text-left">
               <div className="post-cards card text-left">
@@ -54,7 +57,8 @@ class PostDetail extends Component {
                   <p className="card-text author">
                     <MdAccountCircle size={30}/>
                     {post.author} | <MdDateRange size={25} />
-                    {new Date(post.timestamp).toDateString()}
+                    {`${new Date(post.timestamp).toDateString()}
+                    ${new Date(post.timestamp).toLocaleTimeString()}`}
                   </p>
                   <div className="post-buttons float-md-right">
                     <button
@@ -75,7 +79,7 @@ class PostDetail extends Component {
                 <EditPost post={ post } />
               </div>
               <br />
-              <h4>Comments</h4>
+              <h5>Comments ({ post.comments ? post.comments.length: 0})</h5>
               {post.comments ? post.comments.map(comment => {
                 return <Comment key={comment.id} comment={comment}/>
               })
@@ -83,33 +87,36 @@ class PostDetail extends Component {
             </div>
           )
         })
-        : ''}
+        : <PageNotFound />}
 
-        <div className="card border-light mb-3 text-left">
-          <div className="card-header">Add Comment</div>
-          <div className="card-body">
-            <form onSubmit={(e) => e.preventDefault()}>
-              <input
-                name="author"
-                id="author"
-                className="form-control col-4"
-                type="text"
-                placeholder="Enter author name"
-                required />
-              <br />
-              <textarea
-                name="comment"
-                id="comment"
-                className="form-control col-8"
-                rows="3"
-                placeholder="Add comment here..." />
-              <br />
-              <button
-                onClick={this.onSubmitComment.bind(this)}
-                className="btn btn-primary"><MdCreate /> Post Comment</button>
-            </form>
-          </div>
-        </div>
+        { selectedPost.length > 0 ?
+          <div className="card border-light mb-3 text-left">
+            <div className="card-header">Add Comment</div>
+            <div className="card-body">
+              <form onSubmit={ (e) => this.onSubmitComment(e)}>
+                <input
+                  name="author"
+                  id="author"
+                  className="form-control col-4"
+                  type="text"
+                  placeholder="Enter author name"
+                  required />
+                <br />
+                <textarea
+                  name="comment"
+                  id="comment"
+                  className="form-control col-8"
+                  rows="3"
+                  placeholder="Add comment here..."
+                  required />
+                <br />
+                <button
+                  type="submit"
+                  className="btn btn-primary"><MdCreate /> Post Comment</button>
+              </form>
+            </div>
+          </div> : ''
+        }
       </div>
     )
   }
@@ -121,4 +128,7 @@ function mapStateToProps(state) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, actions)(PostDetail));
+export default withRouter(connect(mapStateToProps, {
+  postContent,
+  deleteContent
+})(PostDetail));
