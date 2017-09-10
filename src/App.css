@@ -14,19 +14,51 @@
   color: white;
 }
 
+.App-intro {
+  font-size: large;
+}
+
 .clickables {
   cursor: pointer;
 }
 
-{
+button {
   margin-right: 5px;
 }
 
-.App-intro {
-  font-size: large;
+.author {
+  position: absolute;
+  bottom: 2%;
+}
+
+a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.categories:hover {
+  background-color: #343a40 !important;
+}
+
+.card-margin-bottom {
+  margin-bottom: 10px;
 }
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.post-cards {
+  min-height: 225px;
+}
+
+.post-buttons {
+  position: absolute;
+  bottom: 8%;
+  right: 3%;
+}
+
+.edit-post-container {
+  display: none;
 }
